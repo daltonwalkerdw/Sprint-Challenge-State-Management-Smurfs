@@ -1,16 +1,32 @@
 import React, { Component } from "react";
 import "./App.css";
+import { connect } from "react-redux"
+import { getApi } from "../Actions/actions"
+import Input from "../components/Input"
+
 class App extends Component {
-  render() {
+  render(props) {
     return (
       <div className="App">
         <h1>SMURFS! 2.0 W/ Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
+        <button onClick={() => {
+          this.props.getApi()
+        }}>Get Smurfs</button>
+        {this.props.api.map(data =>
+          <div key={data.id}>
+            <h1>{data.name}</h1>
+            <p>Age: {data.age}</p>
+            <p>Height: {data.height}</p>
+          </div>
+        )}
+        <Input />
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return { api: state.api }
+}
+
+export default connect(mapStateToProps, { getApi })(App);
